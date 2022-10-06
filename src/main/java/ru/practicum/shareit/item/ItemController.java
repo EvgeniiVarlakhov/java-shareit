@@ -1,7 +1,12 @@
 package ru.practicum.shareit.item;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.service.ItemService;
+
+import java.util.Collection;
 
 /**
  * TODO Sprint add-controllers.
@@ -9,4 +14,44 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/items")
 public class ItemController {
+    private final ItemService itemService;
+
+    @Autowired
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
+    }
+
+    @GetMapping
+    public Collection<ItemDto> getAllItem(@RequestHeader("X-Sharer-User-Id") long userId) {
+        return itemService.getAllItem(userId);
+    }
+
+    @GetMapping("/{itemId}")
+    public ItemDto getItemById(@PathVariable long itemId) {
+        return itemService.getItemById(itemId);
+    }
+
+    @GetMapping("/search")
+    public Collection<ItemDto> searchItemByName(@RequestHeader("X-Sharer-User-Id") long userId,
+                                                @RequestParam String text) {
+        return itemService.searchItemByName(userId, text);
+    }
+
+    @PostMapping
+    public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") long userId,
+                              @Validated({CreateItem.class}) @RequestBody ItemDto itemDto) {
+        return itemService.createItem(userId, itemDto);
+    }
+
+    @PatchMapping("/{itemId}")
+    public ItemDto updateItem(@PathVariable long itemId,
+                              @RequestHeader("X-Sharer-User-Id") long userId, @RequestBody ItemDto itemDto) {
+        return itemService.updateItem(itemId, userId, itemDto);
+    }
+
+    @DeleteMapping("/{itemId}")
+    public void deleteItem(@PathVariable long itemId, @RequestHeader("X-Sharer-User-Id") long userId) {
+        itemService.deleteItem(itemId, userId);
+    }
+
 }
