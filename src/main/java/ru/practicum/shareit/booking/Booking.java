@@ -10,9 +10,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-bookings.
- */
 @Getter
 @Setter
 @ToString
@@ -25,4 +22,5 @@ public class Booking {
     private Item item;
     private User booker;
     private BookingStatus status;
+
 }

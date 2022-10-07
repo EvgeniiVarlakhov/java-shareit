@@ -10,9 +10,6 @@ import ru.practicum.shareit.request.ItemRequest;
 
 import javax.validation.constraints.*;
 
-/**
- * TODO Sprint add-controllers.
- */
 @ToString
 @Setter
 @Getter

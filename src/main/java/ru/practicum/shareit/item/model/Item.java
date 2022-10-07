@@ -7,9 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import ru.practicum.shareit.request.ItemRequest;
 
-/**
- * TODO Sprint add-controllers.
- */
 @ToString
 @Setter
 @Getter

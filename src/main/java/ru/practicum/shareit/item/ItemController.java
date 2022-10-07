@@ -8,9 +8,6 @@ import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.Collection;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
 @RequestMapping("/items")
 public class ItemController {
@@ -22,8 +19,8 @@ public class ItemController {
     }
 
     @GetMapping
-    public Collection<ItemDto> getAllItem(@RequestHeader("X-Sharer-User-Id") long userId) {
-        return itemService.getAllItem(userId);
+    public Collection<ItemDto> getAllItems(@RequestHeader("X-Sharer-User-Id") long userId) {
+        return itemService.getAllItems(userId);
     }
 
     @GetMapping("/{itemId}")

@@ -5,7 +5,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import java.util.Collection;
 
 public interface ItemService {
-    Collection<ItemDto> getAllItem(long userId);
+    Collection<ItemDto> getAllItems(long userId);
 
     ItemDto getItemById(long itemId);
 
@@ -16,4 +16,5 @@ public interface ItemService {
     Collection<ItemDto> searchItemByName(long userId, String text);
 
     void deleteItem(long itemId, long userId);
+
 }

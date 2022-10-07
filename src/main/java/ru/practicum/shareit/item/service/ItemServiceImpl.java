@@ -27,8 +27,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Collection<ItemDto> getAllItem(long userId) {
-        userValidate(userId);
+    public Collection<ItemDto> getAllItems(long userId) {
+        validateUser(userId);
         List<ItemDto> itemDtoList = new ArrayList<>();
         for (Item item : itemStorage.getItemListByUser(userId)) {
             itemDtoList.add(ItemMapper.toItemDto(item));
@@ -46,7 +46,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto createItem(long userId, ItemDto itemDto) {
-        userValidate(userId);
+        validateUser(userId);
         Item newItem = ItemMapper.fromItemDto(userId, itemDto);
         log.info("Создана новая вещь = {}", newItem);
         return ItemMapper.toItemDto(itemStorage.addItem(userId, newItem));
@@ -54,7 +54,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto updateItem(long itemId, long userId, ItemDto itemDto) {
-        userValidate(userId);
+        validateUser(userId);
         if (itemStorage.getItemById(itemId).getOwnerId() != userId) {
             throw new ObjectNotFoundException("У пользователя с ID = " + userId + " нет вещи с ID = " + itemId + ".");
         }
@@ -66,9 +66,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Collection<ItemDto> searchItemByName(long userId, String text) {
-        userValidate(userId);
+        validateUser(userId);
         List<ItemDto> itemDtoList = new ArrayList<>();
-        for (Item item : itemStorage.getAllItemList()) {
+        for (Item item : itemStorage.getAllItemsList()) {
             if (!text.isBlank() && item.getAvailable()
                     && (item.getName().toLowerCase().contains(text.toLowerCase())
                     || item.getDescription().toLowerCase().contains(text.toLowerCase()))) {
@@ -80,7 +80,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void deleteItem(long itemId, long userId) {
-        userValidate(userId);
+        validateUser(userId);
         if (itemStorage.getItemById(itemId) == null) {
             throw new ObjectNotFoundException("Вещи с таким ID не существует.");
         }
@@ -91,7 +91,7 @@ public class ItemServiceImpl implements ItemService {
         log.info("Вещь с ID = {} успешно удалена.", itemId);
     }
 
-    private void userValidate(long userId) {
+    private void validateUser(long userId) {
         if (userStorage.getUserById(userId) == null) {
             throw new ObjectNotFoundException("Пользователя с таким ID не существует.");
         }
