@@ -39,7 +39,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto getItemById(long itemId) {
         if (itemStorage.getItemById(itemId) == null) {
-            throw new ObjectNotFoundException("Вещи с таким ID не существует.");
+            throw new ObjectNotFoundException("Вещь с таким ID не существует.");
         }
         return ItemMapper.toItemDto(itemStorage.getItemById(itemId));
     }
@@ -82,7 +82,7 @@ public class ItemServiceImpl implements ItemService {
     public void deleteItem(long itemId, long userId) {
         validateUser(userId);
         if (itemStorage.getItemById(itemId) == null) {
-            throw new ObjectNotFoundException("Вещи с таким ID не существует.");
+            throw new ObjectNotFoundException("Вещь с таким ID не существует.");
         }
         if (itemStorage.getItemById(itemId).getOwnerId() != userId) {
             throw new ObjectNotFoundException("У пользователя с ID = " + userId + " нет вещи с ID = " + itemId + ".");

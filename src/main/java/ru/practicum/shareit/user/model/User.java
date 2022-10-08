@@ -20,7 +20,7 @@ public class User {
     private long id;
     @NotBlank(message = "Name не может быть пустым.", groups = {CreateUser.class})
     private String name;
-    @Email(message = "Email имеет неправельный формат.", groups = {CreateUser.class, UpdateUser.class})
+    @Email(message = "Email имеет неправильный формат.", groups = {CreateUser.class, UpdateUser.class})
     @NotBlank(message = "Email не может быть пустым.", groups = {CreateUser.class})
     private String email;
 }
