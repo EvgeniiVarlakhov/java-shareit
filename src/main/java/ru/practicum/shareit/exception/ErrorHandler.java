@@ -43,14 +43,14 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleEnumBookingStateException (final  EnumBookingStateException e){
+    public ErrorResponse handleEnumBookingStateException(final EnumBookingStateException e) {
         log.error("400 {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
-    @ResponseStatus (HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleNotAvailableException (final NotAvailableException e) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleNotAvailableException(final NotAvailableException e) {
         log.error("400 {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }

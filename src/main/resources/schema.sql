@@ -46,4 +46,4 @@ CREATE TABLE IF NOT EXISTS comments (
     CONSTRAINT pk_comments_id PRIMARY KEY (id),
     CONSTRAINT fk_item_id FOREIGN KEY (item_id) REFERENCES items (id),
     CONSTRAINT fk_author_id FOREIGN KEY (author_id) REFERENCES users (id)
-)
+);

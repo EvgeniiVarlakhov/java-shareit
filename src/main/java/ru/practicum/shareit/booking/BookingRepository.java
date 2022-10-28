@@ -15,7 +15,10 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Collection<Booking> findByBookerIdAndStartAfterOrderByStartDesc(long bookerId, LocalDateTime start);
 
-    Collection<Booking> findByBookerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(long bookerId, LocalDateTime start, LocalDateTime end);
+    Collection<Booking> findByBookerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(
+            long bookerId,
+            LocalDateTime start,
+            LocalDateTime end);
 
     Collection<Booking> findByBookerIdAndEndIsBeforeOrderByStartDesc(long bookerId, LocalDateTime start);
 

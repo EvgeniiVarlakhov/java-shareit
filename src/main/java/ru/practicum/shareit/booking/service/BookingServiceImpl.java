@@ -68,19 +68,30 @@ public class BookingServiceImpl implements BookingService {
                 listOfBooking = bookingRepository.findByBookerIdOrderByStartDesc(bookerId);
                 break;
             case CURRENT:
-                listOfBooking = bookingRepository.findByBookerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(bookerId, LocalDateTime.now(), LocalDateTime.now());
+                listOfBooking = bookingRepository.findByBookerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(
+                        bookerId,
+                        LocalDateTime.now(),
+                        LocalDateTime.now());
                 break;
             case PAST:
-                listOfBooking = bookingRepository.findByBookerIdAndEndIsBeforeOrderByStartDesc(bookerId, LocalDateTime.now());
+                listOfBooking = bookingRepository.findByBookerIdAndEndIsBeforeOrderByStartDesc(
+                        bookerId,
+                        LocalDateTime.now());
                 break;
             case FUTURE:
-                listOfBooking = bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(bookerId, LocalDateTime.now());
+                listOfBooking = bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(
+                        bookerId,
+                        LocalDateTime.now());
                 break;
             case WAITING:
-                listOfBooking = bookingRepository.findByBookerIdAndStatusEqualsOrderByStartDesc(bookerId, BookingStatus.WAITING);
+                listOfBooking = bookingRepository.findByBookerIdAndStatusEqualsOrderByStartDesc(
+                        bookerId,
+                        BookingStatus.WAITING);
                 break;
             case REJECTED:
-                listOfBooking = bookingRepository.findByBookerIdAndStatusEqualsOrderByStartDesc(bookerId, BookingStatus.REJECTED);
+                listOfBooking = bookingRepository.findByBookerIdAndStatusEqualsOrderByStartDesc(
+                        bookerId,
+                        BookingStatus.REJECTED);
                 break;
         }
         for (Booking booking : listOfBooking) {
@@ -119,16 +130,22 @@ public class BookingServiceImpl implements BookingService {
                 listOfBooking = bookingRepository.findFutureBookingsForOwner(ownerId, LocalDateTime.now());
                 break;
             case WAITING:
-                listOfBooking = bookingRepository.findStatusBookingsForOwner(ownerId, BookingStatus.WAITING.toString());
+                listOfBooking = bookingRepository.findStatusBookingsForOwner(
+                        ownerId,
+                        BookingStatus.WAITING.toString());
                 break;
             case REJECTED:
-                listOfBooking = bookingRepository.findStatusBookingsForOwner(ownerId, BookingStatus.REJECTED.toString());
+                listOfBooking = bookingRepository.findStatusBookingsForOwner(
+                        ownerId,
+                        BookingStatus.REJECTED.toString());
                 break;
         }
         for (Booking booking : listOfBooking) {
             Optional<User> booker = userRepository.findById(booking.getBookerId());
             Optional<Item> item = itemRepository.findById(booking.getItemId());
-            item.ifPresent(value -> booker.ifPresent(user -> listOfBookingReturn.add(BookingMapper.mapToBookingFullOut(booking, user, value))));
+            item.ifPresent(
+                    value -> booker.ifPresent(
+                            user -> listOfBookingReturn.add(BookingMapper.mapToBookingFullOut(booking, user, value))));
         }
         return listOfBookingReturn;
     }

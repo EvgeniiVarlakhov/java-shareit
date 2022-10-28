@@ -15,7 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "items")
+@Table(name = "items")
 @ToString
 @Setter
 @Getter
@@ -24,22 +24,22 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class Item {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column (name = "item_name", nullable = false)
+    @Column(name = "item_name", nullable = false)
     private String name;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String description;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private Boolean available;
 
-    @Column (name = "owner_id", nullable = false)
+    @Column(name = "owner_id", nullable = false)
     private long ownerId;
 
-    @Column (name = "request_id")
+    @Column(name = "request_id")
     private long requestId;
 
 }

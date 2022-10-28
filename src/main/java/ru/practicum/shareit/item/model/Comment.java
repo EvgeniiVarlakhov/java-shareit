@@ -29,16 +29,16 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column (name = "text_comment")
+    @Column(name = "text_comment")
     private String text;
 
-    @Column (name = "item_id", nullable = false)
+    @Column(name = "item_id", nullable = false)
     private long itemId;
 
-    @Column (name = "author_ID", nullable = false)
+    @Column(name = "author_ID", nullable = false)
     private long authorID;
 
-    @Column (name = "created_time", nullable = false)
+    @Column(name = "created_time", nullable = false)
     private LocalDateTime createdTime;
 
 }

@@ -172,9 +172,13 @@ public class ItemServiceImpl implements ItemService {
         if (itemFromDb.isEmpty()) {
             throw new ObjectNotFoundException("Вещь с таким ID = " + itemId + " не существует.");
         }
-        Optional<Booking> booking = bookingRepository.findBookingByItemIdAndBookerIdAndEndIsBefore(itemId, userId, LocalDateTime.now());
+        Optional<Booking> booking = bookingRepository.findBookingByItemIdAndBookerIdAndEndIsBefore(
+                itemId,
+                userId,
+                LocalDateTime.now());
         if (booking.isEmpty()) {
-            throw new InvalidValidationException("Комментарии может оставить только пользователь, который брал вещи, после завершения оренды");
+            throw new InvalidValidationException("Комментарии может оставить только пользователь," +
+                    " который брал вещи, после завершения оренды");
         }
         Comment newComment = new Comment(0, commentDtoIn.getText(), itemId, userId, LocalDateTime.now());
         Comment saveComment = commentRepository.save(newComment);
