@@ -5,6 +5,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import ru.practicum.shareit.user.CreateUser;
+import ru.practicum.shareit.user.UpdateUser;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -13,6 +18,12 @@ import lombok.ToString;
 @AllArgsConstructor
 public class UserDto {
     private long id;
+
+    @NotBlank(message = "Name не может быть пустым.", groups = {CreateUser.class})
     private String name;
+
+    @Email(message = "Email имеет неправильный формат.", groups = {CreateUser.class, UpdateUser.class})
+    @NotBlank(message = "Email не может быть пустым.", groups = {CreateUser.class})
     private String email;
+
 }

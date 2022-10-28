@@ -13,33 +13,32 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
-@Table (name = "items")
+@Table(name = "comments")
 @ToString
 @Setter
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode
 @NoArgsConstructor
-public class Item {
+public class Comment {
+
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column (name = "item_name", nullable = false)
-    private String name;
+    @Column (name = "text_comment")
+    private String text;
 
-    @Column (nullable = false)
-    private String description;
+    @Column (name = "item_id", nullable = false)
+    private long itemId;
 
-    @Column (nullable = false)
-    private Boolean available;
+    @Column (name = "author_ID", nullable = false)
+    private long authorID;
 
-    @Column (name = "owner_id", nullable = false)
-    private long ownerId;
-
-    @Column (name = "request_id")
-    private long requestId;
+    @Column (name = "created_time", nullable = false)
+    private LocalDateTime createdTime;
 
 }

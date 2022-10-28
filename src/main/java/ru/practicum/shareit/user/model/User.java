@@ -3,24 +3,34 @@ package ru.practicum.shareit.user.model;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ru.practicum.shareit.user.CreateUser;
-import ru.practicum.shareit.user.UpdateUser;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "users")
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
-    private long id;
-    @NotBlank(message = "Name не может быть пустым.", groups = {CreateUser.class})
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column (name = "user_name")
     private String name;
-    @Email(message = "Email имеет неправильный формат.", groups = {CreateUser.class, UpdateUser.class})
-    @NotBlank(message = "Email не может быть пустым.", groups = {CreateUser.class})
+
+    @Column
     private String email;
+
 }

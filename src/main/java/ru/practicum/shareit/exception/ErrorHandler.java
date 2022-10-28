@@ -42,9 +42,24 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleEnumBookingStateException (final  EnumBookingStateException e){
+        log.error("400 {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus (HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleNotAvailableException (final NotAvailableException e) {
+        log.error("400 {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(final Exception e) {
         log.error("500 {}", e.getMessage(), e);
         return new ErrorResponse("Произошла непредвиденная ошибка.");
     }
+
 }
