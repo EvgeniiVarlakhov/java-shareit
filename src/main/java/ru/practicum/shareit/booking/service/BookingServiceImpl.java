@@ -54,7 +54,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Collection<BookingDtoFullOut> getListOfBookingsBooker(long bookerId, String state) {
-        BookingState bookingState = validateBookingState(state);
+        validateBookingState(state);
+        BookingState bookingState = BookingState.valueOf(state);
         User booker = validateUser(bookerId);
         Collection<BookingDtoFullOut> listOfBookingReturn = new ArrayList<>();
         Collection<Booking> listOfBooking = new ArrayList<>();
@@ -98,7 +99,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Collection<BookingDtoFullOut> getListOfBookingsOwner(long ownerId, String state) {
-        BookingState bookingState = validateBookingState(state);
+        validateBookingState(state);
+        BookingState bookingState = BookingState.valueOf(state);
         validateUser(ownerId);
         Collection<Item> itemsListByOwner = itemRepository.findAllByOwnerIdIsOrderById(ownerId);
         if (itemsListByOwner.isEmpty()) {
@@ -192,14 +194,12 @@ public class BookingServiceImpl implements BookingService {
         return user.get();
     }
 
-    private BookingState validateBookingState(String state) {
-        BookingState bookingStateInput;
+    private void validateBookingState(String state) {
         try {
-            bookingStateInput = BookingState.valueOf(state);
+            BookingState.valueOf(state);
         } catch (IllegalArgumentException e) {
             throw new EnumBookingStateException("Unknown state: " + state);
         }
-        return bookingStateInput;
     }
 
     private Item checkItem(long itemId) {
