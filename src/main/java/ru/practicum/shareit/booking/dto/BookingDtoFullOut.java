@@ -24,7 +24,7 @@ public class BookingDtoFullOut {
 
     @Data
     public static class UserInfo {
-    private final long id;
+        private final long id;
     }
 
     @Data

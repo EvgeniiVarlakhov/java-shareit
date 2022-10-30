@@ -17,6 +17,6 @@ import javax.validation.constraints.NotBlank;
 @RequiredArgsConstructor
 public class CommentDtoIn {
 
-    @NotBlank(message = "Кооментарий не может быть пустым")
+    @NotBlank(message = "Комментарий не может быть пустым")
     private String text;
 }

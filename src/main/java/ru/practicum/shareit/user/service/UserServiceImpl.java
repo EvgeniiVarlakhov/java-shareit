@@ -30,14 +30,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDto createUser(UserDto userDto) {
-        User newUser;
-        try {
-            newUser = userRepository.save(UserMapper.mapToNewUser(userDto));
-        } catch (Exception e) {
-            throw new ConflictException("Пользователь с таким Email уже существует.");
-        }
-        log.info("Создан новый пользователь = {}", newUser);
-        return UserMapper.toUserDto(newUser);
+        User newSaveUser = validateUserDto(userDto);
+        log.info("Создан новый пользователь = {}", newSaveUser);
+        return UserMapper.toUserDto(newSaveUser);
     }
 
     @Transactional
@@ -71,6 +66,16 @@ public class UserServiceImpl implements UserService {
             throw new ObjectNotFoundException("Пользователя с ID = " + idUser + " не существует.");
         }
         return UserMapper.toUserDto(userFromDb.get());
+    }
+
+    private User validateUserDto(UserDto userDto) {
+        User newUser;
+        try {
+            newUser = userRepository.save(UserMapper.mapToNewUser(userDto));
+        } catch (Exception e) {
+            throw new ConflictException("Пользователь с таким Email уже существует.");
+        }
+        return newUser;
     }
 
 }
