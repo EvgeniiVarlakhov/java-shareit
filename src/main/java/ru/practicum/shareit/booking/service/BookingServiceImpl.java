@@ -157,7 +157,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public BookingDtoFullOut getApprovedBooking(long bookingId, long ownerId, String approved) {
-        validateApprovedParam(approved);
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isEmpty()) {
             throw new ObjectNotFoundException("Запроса на бронирование с ID = " + bookingId + " не существоет.");
@@ -178,6 +177,8 @@ public class BookingServiceImpl implements BookingService {
             case "false":
                 booking.get().setStatus(BookingStatus.REJECTED);
                 break;
+            default:
+                throw new InvalidValidationException("Значение должно быть true/false");
         }
         Booking updateBooking = bookingRepository.save(booking.get());
         return BookingMapper.mapToBookingFullOut(updateBooking, booker, item);
@@ -199,12 +200,6 @@ public class BookingServiceImpl implements BookingService {
             throw new EnumBookingStateException("Unknown state: " + state);
         }
         return bookingStateInput;
-    }
-
-    private void validateApprovedParam(String approved) {
-        if (!(approved.equals("true") | approved.equals("false"))) {
-            throw new InvalidValidationException("Значение должно быть true/false");
-        }
     }
 
     private Item checkItem(long itemId) {
