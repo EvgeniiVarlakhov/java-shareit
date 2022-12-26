@@ -1,21 +1,23 @@
-package ru.practicum.shareit.request;
+package ru.practicum.shareit.item.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @ToString
-@EqualsAndHashCode
+@Setter
+@Getter
 @AllArgsConstructor
-public class ItemRequest {
+@EqualsAndHashCode
+@RequiredArgsConstructor
+public class CommentDtoOut {
     private long id;
-    private String description;
-    private long requestorId;
+    private String text;
+    private String authorName;
     private LocalDateTime created;
 }
