@@ -2,6 +2,8 @@ package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingMapper;
@@ -53,41 +55,48 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<BookingDtoFullOut> getListOfBookingsBooker(long bookerId, String state) {
+    public Collection<BookingDtoFullOut> getListOfBookingsBooker(long bookerId, String state, int start, int size) {
         validateBookingState(state);
+        validateParams(start, size);
+        Pageable pageable = PageRequest.of(start / size, size);
         BookingState bookingState = BookingState.valueOf(state);
         User booker = validateUser(bookerId);
         Collection<BookingDtoFullOut> listOfBookingReturn = new ArrayList<>();
         Collection<Booking> listOfBooking = new ArrayList<>();
         switch (bookingState) {
             case ALL:
-                listOfBooking = bookingRepository.findByBookerIdOrderByStartDesc(bookerId);
+                listOfBooking = bookingRepository.findByBookerIdOrderByStartDesc(bookerId, pageable).getContent();
                 break;
             case CURRENT:
                 listOfBooking = bookingRepository.findByBookerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(
                         bookerId,
                         LocalDateTime.now(),
-                        LocalDateTime.now());
+                        LocalDateTime.now(),
+                        pageable).getContent();
                 break;
             case PAST:
                 listOfBooking = bookingRepository.findByBookerIdAndEndIsBeforeOrderByStartDesc(
                         bookerId,
-                        LocalDateTime.now());
+                        LocalDateTime.now(),
+                        pageable).getContent();
                 break;
             case FUTURE:
                 listOfBooking = bookingRepository.findByBookerIdAndStartAfterOrderByStartDesc(
                         bookerId,
-                        LocalDateTime.now());
+                        LocalDateTime.now(),
+                        pageable).getContent();
                 break;
             case WAITING:
                 listOfBooking = bookingRepository.findByBookerIdAndStatusEqualsOrderByStartDesc(
                         bookerId,
-                        BookingStatus.WAITING);
+                        BookingStatus.WAITING,
+                        pageable).getContent();
                 break;
             case REJECTED:
                 listOfBooking = bookingRepository.findByBookerIdAndStatusEqualsOrderByStartDesc(
                         bookerId,
-                        BookingStatus.REJECTED);
+                        BookingStatus.REJECTED,
+                        pageable).getContent();
                 break;
         }
         for (Booking booking : listOfBooking) {
@@ -98,11 +107,16 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<BookingDtoFullOut> getListOfBookingsOwner(long ownerId, String state) {
+    public Collection<BookingDtoFullOut> getListOfBookingsOwner(long ownerId, String state, int start, int size) {
         validateBookingState(state);
+        validateParams(start, size);
+        Pageable pageable = PageRequest.of(start / size, size);
         BookingState bookingState = BookingState.valueOf(state);
         validateUser(ownerId);
-        Collection<Item> itemsListByOwner = itemRepository.findAllByOwnerIdIsOrderById(ownerId);
+        Collection<Item> itemsListByOwner = itemRepository.findAllByOwnerIdIsOrderById(
+                        ownerId,
+                        PageRequest.of(0, 1))
+                .getContent();
         if (itemsListByOwner.isEmpty()) {
             throw new ObjectNotFoundException("У пользователя ID = " + ownerId + " нет ни одной вещи.");
         }
@@ -110,26 +124,42 @@ public class BookingServiceImpl implements BookingService {
         Collection<Booking> listOfBooking = new ArrayList<>();
         switch (bookingState) {
             case ALL:
-                listOfBooking = bookingRepository.findAllBookingsForOwner(ownerId);
+                listOfBooking = bookingRepository.findAllBookingsForOwner(ownerId, pageable).getContent();
                 break;
             case CURRENT:
-                listOfBooking = bookingRepository.findCurrentBookingsForOwner(ownerId, LocalDateTime.now());
+                listOfBooking = bookingRepository.findCurrentBookingsForOwner(
+                                ownerId,
+                                LocalDateTime.now(),
+                                pageable).
+                        getContent();
                 break;
             case PAST:
-                listOfBooking = bookingRepository.findPastBookingsForOwner(ownerId, LocalDateTime.now());
+                listOfBooking = bookingRepository.findPastBookingsForOwner(
+                                ownerId,
+                                LocalDateTime.now(),
+                                pageable)
+                        .getContent();
                 break;
             case FUTURE:
-                listOfBooking = bookingRepository.findFutureBookingsForOwner(ownerId, LocalDateTime.now());
+                listOfBooking = bookingRepository.findFutureBookingsForOwner(
+                                ownerId,
+                                LocalDateTime.now(),
+                                pageable)
+                        .getContent();
                 break;
             case WAITING:
                 listOfBooking = bookingRepository.findStatusBookingsForOwner(
-                        ownerId,
-                        BookingStatus.WAITING.toString());
+                                ownerId,
+                                BookingStatus.WAITING.toString(),
+                                pageable)
+                        .getContent();
                 break;
             case REJECTED:
                 listOfBooking = bookingRepository.findStatusBookingsForOwner(
-                        ownerId,
-                        BookingStatus.REJECTED.toString());
+                                ownerId,
+                                BookingStatus.REJECTED.toString(),
+                                pageable)
+                        .getContent();
                 break;
         }
         for (Booking booking : listOfBooking) {
@@ -216,6 +246,15 @@ public class BookingServiceImpl implements BookingService {
     private void checkBookingParam(BookingDtoIn bookingDto) {
         if (bookingDto.getEnd().isBefore(bookingDto.getStart())) {
             throw new NotAvailableException("Дата окончания бронирования не может быть раньше даты начала.");
+        }
+    }
+
+    private void validateParams(int start, int size) {
+        if (start < 0) {
+            throw new InvalidValidationException("Стартовая страница не может быть отрицательной.");
+        }
+        if (size <= 0) {
+            throw new InvalidValidationException("Количество элементов не может быть равным 0 или отрицательным");
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public interface ItemService {
 
-    Collection<ItemDtoForOwner> getAllItems(long userId);
+    Collection<ItemDtoForOwner> getAllItems(long userId, int start, int size);
 
     ItemDtoAbstract getItemById(long userId, long itemId);
 
@@ -19,7 +19,7 @@ public interface ItemService {
 
     ItemDto updateItem(long itemId, long userId, ItemDto itemDto);
 
-    Collection<ItemDtoForBooker> searchItemByName(long userId, String text);
+    Collection<ItemDtoForBooker> searchItemByName(long userId, String text, int start, int size);
 
     void deleteItem(long itemId, long userId);
 

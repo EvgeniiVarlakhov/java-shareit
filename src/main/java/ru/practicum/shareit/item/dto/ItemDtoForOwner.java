@@ -22,7 +22,7 @@ public class ItemDtoForOwner extends ItemDtoAbstract {
     private String description;
     private Boolean available;
     private long ownerId;
-    private long requestId;
+    private Long requestId;
     private BookingInfo lastBooking;
     private BookingInfo nextBooking;
     private Collection<CommentDtoOut> comments;
