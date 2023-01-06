@@ -18,6 +18,6 @@ public interface ItemRequestRepository extends JpaRepository<ItemRequest, Long> 
             "from requests " +
             "where requestor_id != ?1 " +
             "order by created_request desc", nativeQuery = true)
-    Page<ItemRequest> findAllRequests (long ownerId, Pageable pageable);
+    Page<ItemRequest> findAllRequests(long ownerId, Pageable pageable);
 
 }

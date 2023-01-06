@@ -130,8 +130,8 @@ public class BookingServiceImpl implements BookingService {
                 listOfBooking = bookingRepository.findCurrentBookingsForOwner(
                                 ownerId,
                                 LocalDateTime.now(),
-                                pageable).
-                        getContent();
+                                pageable)
+                        .getContent();
                 break;
             case PAST:
                 listOfBooking = bookingRepository.findPastBookingsForOwner(
