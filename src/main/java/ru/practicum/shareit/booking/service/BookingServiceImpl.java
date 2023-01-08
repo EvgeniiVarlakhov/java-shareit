@@ -57,7 +57,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Collection<BookingDtoFullOut> getListOfBookingsBooker(long bookerId, String state, int start, int size) {
         validateBookingState(state);
-        validateParams(start, size);
         Pageable pageable = PageRequest.of(start / size, size);
         BookingState bookingState = BookingState.valueOf(state);
         User booker = validateUser(bookerId);
@@ -109,7 +108,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Collection<BookingDtoFullOut> getListOfBookingsOwner(long ownerId, String state, int start, int size) {
         validateBookingState(state);
-        validateParams(start, size);
         Pageable pageable = PageRequest.of(start / size, size);
         BookingState bookingState = BookingState.valueOf(state);
         validateUser(ownerId);
@@ -246,15 +244,6 @@ public class BookingServiceImpl implements BookingService {
     private void checkBookingParam(BookingDtoIn bookingDto) {
         if (bookingDto.getEnd().isBefore(bookingDto.getStart())) {
             throw new NotAvailableException("Дата окончания бронирования не может быть раньше даты начала.");
-        }
-    }
-
-    private void validateParams(int start, int size) {
-        if (start < 0) {
-            throw new InvalidValidationException("Стартовая страница не может быть отрицательной.");
-        }
-        if (size <= 0) {
-            throw new InvalidValidationException("Количество элементов не может быть равным 0 или отрицательным");
         }
     }
 

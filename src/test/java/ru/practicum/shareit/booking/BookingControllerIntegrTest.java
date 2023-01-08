@@ -77,6 +77,48 @@ class BookingControllerIntegrTest {
 
     @SneakyThrows
     @Test
+    void getListOfBookingsBooker_whenParamStartLessZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/bookings")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(-10))
+                        .param("size", String.valueOf(20)))
+                .andExpect(status().isBadRequest());
+
+        verify(bookingService, never()).getListOfBookingsBooker(userId, "ALL", -10, 20);
+    }
+
+    @SneakyThrows
+    @Test
+    void getListOfBookingsBooker_whenParamSizeLessZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/bookings")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(0))
+                        .param("size", String.valueOf(-20)))
+                .andExpect(status().isBadRequest());
+
+        verify(bookingService, never()).getListOfBookingsBooker(userId, "ALL", 0, -20);
+    }
+
+    @SneakyThrows
+    @Test
+    void getListOfBookingsBooker_whenParamSizeIsZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/bookings")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(0))
+                        .param("size", String.valueOf(0)))
+                .andExpect(status().isBadRequest());
+
+        verify(bookingService, never()).getListOfBookingsBooker(userId, "ALL", 0, 0);
+    }
+
+    @SneakyThrows
+    @Test
     void getListOfBookingsBooker_whenWithParams_thenStatusOkAndReturnCollection() {
         long userId = 1L;
         Collection<BookingDtoFullOut> listOfBooking = List.of(bookingDtoFullOut);
@@ -113,6 +155,48 @@ class BookingControllerIntegrTest {
 
         verify(bookingService).getListOfBookingsOwner(userId, "ALL", 0, 10);
         assertEquals(objectMapper.writeValueAsString(listOfBooking), result);
+    }
+
+    @SneakyThrows
+    @Test
+    void getListOfBookingsOwner_whenParamStartLessZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/bookings/owner")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(-10))
+                        .param("size", String.valueOf(20)))
+                .andExpect(status().isBadRequest());
+
+        verify(bookingService, never()).getListOfBookingsOwner(userId, "ALL", -10, 20);
+    }
+
+    @SneakyThrows
+    @Test
+    void getListOfBookingsOwner_whenParamSizeLessZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/bookings/owner")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(0))
+                        .param("size", String.valueOf(-20)))
+                .andExpect(status().isBadRequest());
+
+        verify(bookingService, never()).getListOfBookingsOwner(userId, "ALL", 0, -20);
+    }
+
+    @SneakyThrows
+    @Test
+    void getListOfBookingsOwner_whenParamSizeIsZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/bookings/owner")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(0))
+                        .param("size", String.valueOf(0)))
+                .andExpect(status().isBadRequest());
+
+        verify(bookingService, never()).getListOfBookingsOwner(userId, "ALL", 0, 0);
     }
 
     @SneakyThrows

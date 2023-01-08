@@ -2,24 +2,19 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDtoFullOut;
 import ru.practicum.shareit.booking.dto.BookingDtoIn;
 import ru.practicum.shareit.booking.service.BookingService;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
+@Validated
 public class BookingController {
     private final BookingService bookingService;
 
@@ -27,8 +22,8 @@ public class BookingController {
     public Collection<BookingDtoFullOut> getListOfBookingsBooker(
             @RequestHeader("X-Sharer-User-Id") long userId,
             @RequestParam(value = "state", defaultValue = "ALL", required = false) String bookingState,
-            @RequestParam(value = "from", defaultValue = "0", required = false) int start,
-            @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+            @RequestParam(value = "from", defaultValue = "0", required = false) @PositiveOrZero int start,
+            @RequestParam(value = "size", defaultValue = "10", required = false) @Positive int size) {
         return bookingService.getListOfBookingsBooker(userId, bookingState, start, size);
     }
 
@@ -36,8 +31,8 @@ public class BookingController {
     public Collection<BookingDtoFullOut> getListOfBookingsOwner(
             @RequestHeader("X-Sharer-User-Id") long ownerId,
             @RequestParam(value = "state", defaultValue = "ALL", required = false) String bookingState,
-            @RequestParam(value = "from", defaultValue = "0", required = false) int start,
-            @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+            @RequestParam(value = "from", defaultValue = "0", required = false) @PositiveOrZero int start,
+            @RequestParam(value = "size", defaultValue = "10", required = false) @Positive int size) {
         return bookingService.getListOfBookingsOwner(ownerId, bookingState, start, size);
     }
 

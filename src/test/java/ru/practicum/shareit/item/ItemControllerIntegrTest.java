@@ -51,6 +51,48 @@ class ItemControllerIntegrTest {
 
     @SneakyThrows
     @Test
+    void getAllItems_whenParamStartLessZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/items")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(-10))
+                        .param("size", String.valueOf(20)))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).getAllItems(userId, -10, 20);
+    }
+
+    @SneakyThrows
+    @Test
+    void getAllItems_whenParamSizeLessZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/items")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(0))
+                        .param("size", String.valueOf(-20)))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).getAllItems(userId, 0, -20);
+    }
+
+    @SneakyThrows
+    @Test
+    void getAllItems_whenParamSizeIsZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/items")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(0))
+                        .param("size", String.valueOf(0)))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).getAllItems(userId, 0, 0);
+    }
+
+    @SneakyThrows
+    @Test
     void getAllItems_whenWithoutSizeParam_thenStatusOkAndSizeParamIsDefault() {
         long userId = 1L;
         Collection<ItemDtoForOwner> listOfItem = List.of(new ItemDtoForOwner());
@@ -121,6 +163,48 @@ class ItemControllerIntegrTest {
                 .getContentAsString();
         verify(itemService).searchItemByName(userId, " ", 0, 10);
         assertEquals(objectMapper.writeValueAsString(listOfItem), result);
+    }
+
+    @SneakyThrows
+    @Test
+    void searchItemByName_whenParamStartLessZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/items/search")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(-10))
+                        .param("size", String.valueOf(20)))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).searchItemByName(userId, " ", -10, 20);
+    }
+
+    @SneakyThrows
+    @Test
+    void searchItemByName_whenParamSizeLessZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/items/search")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(0))
+                        .param("size", String.valueOf(-20)))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).searchItemByName(userId, " ", 0, -20);
+    }
+
+    @SneakyThrows
+    @Test
+    void searchItemByName_whenParamSizeIsZero_thenStatusBadRequest() {
+        long userId = 1L;
+
+        mvc.perform(get("/items/search")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(0))
+                        .param("size", String.valueOf(0)))
+                .andExpect(status().isBadRequest());
+
+        verify(itemService, never()).searchItemByName(userId, " ", 0, 0);
     }
 
     @SneakyThrows

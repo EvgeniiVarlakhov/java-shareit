@@ -3,8 +3,6 @@ package ru.practicum.shareit.booking.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -56,9 +54,6 @@ class BookingServiceImplTest {
 
     @InjectMocks
     private BookingServiceImpl bookingService;
-
-    @Captor
-    private ArgumentCaptor<Booking> bookingArgumentCaptor;
 
     @BeforeEach
     void createUnits() {
@@ -177,39 +172,6 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getListOfBookingsBooker_whenStartLessZero_thenInvalidValidationException() {
-        long bookerId = 2L;
-        int start = -10;
-        int size = 10;
-        String state = BookingState.ALL.toString();
-
-        assertThrows(InvalidValidationException.class,
-                () -> bookingService.getListOfBookingsBooker(bookerId, state, start, size));
-    }
-
-    @Test
-    void getListOfBookingsBooker_whenSizeLessZero_thenInvalidValidationException() {
-        long bookerId = 2L;
-        int start = 0;
-        int size = -10;
-        String state = BookingState.ALL.toString();
-
-        assertThrows(InvalidValidationException.class,
-                () -> bookingService.getListOfBookingsBooker(bookerId, state, start, size));
-    }
-
-    @Test
-    void getListOfBookingsBooker_whenSizeIsZero_thenInvalidValidationException() {
-        long bookerId = 2L;
-        int start = 0;
-        int size = 0;
-        String state = BookingState.ALL.toString();
-
-        assertThrows(InvalidValidationException.class,
-                () -> bookingService.getListOfBookingsBooker(bookerId, state, start, size));
-    }
-
-    @Test
     void getListOfBookingsBooker_whenBookerNotFound_thenInvalidValidationException() {
         long bookerId = 2L;
         int start = 0;
@@ -246,8 +208,6 @@ class BookingServiceImplTest {
         long bookerId = 2L;
         int start = 0;
         int size = 10;
-        LocalDateTime time1 = LocalDateTime.now();
-        LocalDateTime time2 = LocalDateTime.now();
         String state = BookingState.CURRENT.toString();
         Pageable pageable = PageRequest.of(start / size, size);
         BookingDtoFullOut expectedBooking = BookingMapper.mapToBookingFullOut(booking, user, item);
@@ -273,8 +233,6 @@ class BookingServiceImplTest {
         long bookerId = 2L;
         int start = 0;
         int size = 10;
-        LocalDateTime time1 = LocalDateTime.now();
-        LocalDateTime time2 = LocalDateTime.now();
         String state = BookingState.PAST.toString();
         Pageable pageable = PageRequest.of(start / size, size);
         BookingDtoFullOut expectedBooking = BookingMapper.mapToBookingFullOut(booking, user, item);
@@ -299,8 +257,6 @@ class BookingServiceImplTest {
         long bookerId = 2L;
         int start = 0;
         int size = 10;
-        LocalDateTime time1 = LocalDateTime.now();
-        LocalDateTime time2 = LocalDateTime.now();
         String state = BookingState.FUTURE.toString();
         Pageable pageable = PageRequest.of(start / size, size);
         BookingDtoFullOut expectedBooking = BookingMapper.mapToBookingFullOut(booking, user, item);
@@ -325,8 +281,6 @@ class BookingServiceImplTest {
         long bookerId = 2L;
         int start = 0;
         int size = 10;
-        LocalDateTime time1 = LocalDateTime.now();
-        LocalDateTime time2 = LocalDateTime.now();
         String state = BookingState.WAITING.toString();
         Pageable pageable = PageRequest.of(start / size, size);
         BookingDtoFullOut expectedBooking = BookingMapper.mapToBookingFullOut(booking, user, item);
@@ -351,8 +305,6 @@ class BookingServiceImplTest {
         long bookerId = 2L;
         int start = 0;
         int size = 10;
-        LocalDateTime time1 = LocalDateTime.now();
-        LocalDateTime time2 = LocalDateTime.now();
         String state = BookingState.REJECTED.toString();
         Pageable pageable = PageRequest.of(start / size, size);
         BookingDtoFullOut expectedBooking = BookingMapper.mapToBookingFullOut(booking, user, item);
@@ -384,40 +336,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getListOfBookingsOwner_whenStartLessZero_thenInvalidValidationException() {
-        long ownerId = 2L;
-        int start = -10;
-        int size = 10;
-        String state = BookingState.ALL.toString();
-
-        assertThrows(InvalidValidationException.class,
-                () -> bookingService.getListOfBookingsOwner(ownerId, state, start, size));
-    }
-
-    @Test
-    void getListOfBookingsOwner_whenSizeLessZero_thenInvalidValidationException() {
-        long ownerId = 2L;
-        int start = 0;
-        int size = -10;
-        String state = BookingState.ALL.toString();
-
-        assertThrows(InvalidValidationException.class,
-                () -> bookingService.getListOfBookingsOwner(ownerId, state, start, size));
-    }
-
-    @Test
-    void getListOfBookingsOwner_whenSizeIsZero_thenInvalidValidationException() {
-        long ownerId = 2L;
-        int start = 0;
-        int size = 0;
-        String state = BookingState.ALL.toString();
-
-        assertThrows(InvalidValidationException.class,
-                () -> bookingService.getListOfBookingsOwner(ownerId, state, start, size));
-    }
-
-    @Test
-    void getListOfBookingsOwner_whenOwnerNotFound_thenInvalidValidationException() {
+    void getListOfBookingsOwner_whenOwnerNotFound_thenObjectNotFoundException() {
         long ownerId = 2L;
         int start = 0;
         int size = 10;
@@ -434,10 +353,7 @@ class BookingServiceImplTest {
         int start = 0;
         int size = 10;
         String state = BookingState.ALL.toString();
-        Pageable pageable = PageRequest.of(start / size, size);
         BookingDtoFullOut expectedBooking = BookingMapper.mapToBookingFullOut(booking, owner, item);
-        Page<Booking> page = new PageImpl<>(List.of(booking));
-        Collection<BookingDtoFullOut> expectedList = List.of(expectedBooking);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(owner));
         when(itemRepository.findAllByOwnerIdIsOrderById(ownerId, PageRequest.of(0, 1))).thenReturn(Page.empty());
 

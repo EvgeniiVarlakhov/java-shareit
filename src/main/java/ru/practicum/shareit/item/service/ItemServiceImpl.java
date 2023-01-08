@@ -42,7 +42,6 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Collection<ItemDtoForOwner> getAllItems(long ownerId, int start, int size) {
         validateUser(ownerId);
-        validateParams(start, size);
         Pageable pageable = PageRequest.of(start / size, size);
         Optional<Booking> lastBooking;
         Optional<Booking> nextBooking;
@@ -137,7 +136,6 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Collection<ItemDtoForBooker> searchItemByName(long userId, String text, int start, int size) {
         validateUser(userId);
-        validateParams(start, size);
         Pageable pageable = PageRequest.of(start / size, size);
         Collection<Item> itemsList = new ArrayList<>();
         Collection<CommentDtoOut> commentDtoOutList = new ArrayList<>();
@@ -197,15 +195,6 @@ public class ItemServiceImpl implements ItemService {
             throw new ObjectNotFoundException("Пользователя с ID = " + userId + " не существует.");
         }
         return user.get();
-    }
-
-    private void validateParams(int start, int size) {
-        if (start < 0) {
-            throw new InvalidValidationException("Стартовая страница не может быть отрицательной.");
-        }
-        if (size <= 0) {
-            throw new InvalidValidationException("Количество элементов не может быть равным 0 или отрицательным");
-        }
     }
 
 }

@@ -8,10 +8,13 @@ import ru.practicum.shareit.request.dto.ItemRequestDtoOut;
 import ru.practicum.shareit.request.dto.ItemRequestDtoOutWithReplies;
 import ru.practicum.shareit.request.service.ItemRequestService;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 
 @RestController
 @RequestMapping(path = "/requests")
+@Validated
 public class ItemRequestController {
     private final ItemRequestService itemRequestService;
 
@@ -35,8 +38,8 @@ public class ItemRequestController {
     @GetMapping(path = "/all")
     public Collection<ItemRequestDtoOutWithReplies> getListOfItemRequestByAllUsers(
             @RequestHeader("X-Sharer-User-Id") long userId,
-            @RequestParam(value = "from", defaultValue = "0", required = false) int start,
-            @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+            @RequestParam(value = "from", defaultValue = "0", required = false) @PositiveOrZero int start,
+            @RequestParam(value = "size", defaultValue = "10", required = false) @Positive int size) {
         return itemRequestService.getListOfItemRequestByAllUsers(userId, start, size);
     }
 

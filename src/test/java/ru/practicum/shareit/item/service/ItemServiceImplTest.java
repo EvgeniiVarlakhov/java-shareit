@@ -80,36 +80,6 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void getAllItems_whenStartLessZero_thenInvalidValidationException() {
-        long ownerId = 1L;
-        int start = -10;
-        int size = 10;
-        when(userRepository.findById(ownerId)).thenReturn(Optional.of(owner));
-
-        assertThrows(InvalidValidationException.class, () -> itemService.getAllItems(ownerId, start, size));
-    }
-
-    @Test
-    void getAllItems_whenSizeIsZero_thenInvalidValidationException() {
-        long ownerId = 1L;
-        int start = 0;
-        int size = 0;
-        when(userRepository.findById(ownerId)).thenReturn(Optional.of(owner));
-
-        assertThrows(InvalidValidationException.class, () -> itemService.getAllItems(ownerId, start, size));
-    }
-
-    @Test
-    void getAllItems_whenSizeLessZero_thenInvalidValidationException() {
-        long ownerId = 1L;
-        int start = 0;
-        int size = -10;
-        when(userRepository.findById(ownerId)).thenReturn(Optional.of(owner));
-
-        assertThrows(InvalidValidationException.class, () -> itemService.getAllItems(ownerId, start, size));
-    }
-
-    @Test
     void getAllItems_whenWithoutBookings_thenReturnItemWithLastAndNextBookingsAreNull() {
         long ownerId = 1L;
         int start = 0;
@@ -352,39 +322,6 @@ class ItemServiceImplTest {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         assertThrows(ObjectNotFoundException.class, () -> itemService.searchItemByName(userId, text, start, size));
-    }
-
-    @Test
-    void searchItemByName_whenStartLessZero_thenInvalidValidationException() {
-        long userId = 2L;
-        String text = " text";
-        int start = -100;
-        int size = 10;
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-
-        assertThrows(InvalidValidationException.class, () -> itemService.searchItemByName(userId, text, start, size));
-    }
-
-    @Test
-    void searchItemByName_whenSizeIsZero_thenInvalidValidationException() {
-        long userId = 2L;
-        String text = " text";
-        int start = 0;
-        int size = 0;
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-
-        assertThrows(InvalidValidationException.class, () -> itemService.searchItemByName(userId, text, start, size));
-    }
-
-    @Test
-    void searchItemByName_whenSizeLessZero_thenInvalidValidationException() {
-        long userId = 2L;
-        String text = " text";
-        int start = 0;
-        int size = -100;
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-
-        assertThrows(InvalidValidationException.class, () -> itemService.searchItemByName(userId, text, start, size));
     }
 
     @Test

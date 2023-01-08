@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.exception.InvalidValidationException;
 import ru.practicum.shareit.exception.ObjectNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -69,7 +68,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public Collection<ItemRequestDtoOutWithReplies> getListOfItemRequestByAllUsers(long userId, int start, int size) {
         validateUser(userId);
-        validateParams(start, size);
         Pageable pageable = PageRequest.of(start / size, size);
         Collection<ItemRequestDtoOutWithReplies> listOfRequests = new ArrayList<>();
         for (ItemRequest itemRequest : itemRequestRepository.findAllRequests(userId, pageable).getContent()) {
@@ -83,15 +81,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
             throw new ObjectNotFoundException("Пользователя с ID = " + userId + " не существует.");
-        }
-    }
-
-    private void validateParams(int start, int size) {
-        if (start < 0) {
-            throw new InvalidValidationException("Стартовая страница не может быть отрицательной.");
-        }
-        if (size <= 0) {
-            throw new InvalidValidationException("Количество элементов не может быть равным 0 или отрицательным");
         }
     }
 

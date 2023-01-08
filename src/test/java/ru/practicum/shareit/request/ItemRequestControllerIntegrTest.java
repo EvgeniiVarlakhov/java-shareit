@@ -138,6 +138,54 @@ class ItemRequestControllerIntegrTest {
 
     @SneakyThrows
     @Test
+    void getListOfItemRequestByAllUsers_whenParamFromLessZero_then() {
+        long userId = 1L;
+        Collection<ItemRequestDtoOutWithReplies> listRequest = List.of(itemRequestWithReplies);
+        when(service.getListOfItemRequestByAllUsers(userId, 2, 20)).thenReturn(listRequest);
+
+        mvc.perform(get("/requests/all")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(-10))
+                        .param("size", String.valueOf(20)))
+                .andExpect(status().isBadRequest());
+
+        verify(service, never()).getListOfItemRequestByAllUsers(userId, -10, 20);
+    }
+
+    @SneakyThrows
+    @Test
+    void getListOfItemRequestByAllUsers_whenParamSizeLessZero_then() {
+        long userId = 1L;
+        Collection<ItemRequestDtoOutWithReplies> listRequest = List.of(itemRequestWithReplies);
+        when(service.getListOfItemRequestByAllUsers(userId, 2, 20)).thenReturn(listRequest);
+
+        mvc.perform(get("/requests/all")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(0))
+                        .param("size", String.valueOf(-20)))
+                .andExpect(status().isBadRequest());
+
+        verify(service, never()).getListOfItemRequestByAllUsers(userId, 0, -20);
+    }
+
+    @SneakyThrows
+    @Test
+    void getListOfItemRequestByAllUsers_whenParamSizeIsZero_then() {
+        long userId = 1L;
+        Collection<ItemRequestDtoOutWithReplies> listRequest = List.of(itemRequestWithReplies);
+        when(service.getListOfItemRequestByAllUsers(userId, 2, 20)).thenReturn(listRequest);
+
+        mvc.perform(get("/requests/all")
+                        .header("X-Sharer-User-Id", userId)
+                        .param("from", String.valueOf(0))
+                        .param("size", String.valueOf(0)))
+                .andExpect(status().isBadRequest());
+
+        verify(service, never()).getListOfItemRequestByAllUsers(userId, 0, 0);
+    }
+
+    @SneakyThrows
+    @Test
     void createItemRequest_whenRequestIsNull_thenReturnBadRequest() {
         long userId = 1L;
         ItemRequestDtoIn itemRequestDtoIn = new ItemRequestDtoIn(null);

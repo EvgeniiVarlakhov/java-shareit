@@ -20,10 +20,13 @@ import ru.practicum.shareit.item.dto.ItemDtoForBooker;
 import ru.practicum.shareit.item.dto.ItemDtoForOwner;
 import ru.practicum.shareit.item.service.ItemService;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 
 @RestController
 @RequestMapping("/items")
+@Validated
 public class ItemController {
     private final ItemService itemService;
 
@@ -35,8 +38,8 @@ public class ItemController {
     @GetMapping
     public Collection<ItemDtoForOwner> getAllItems(
             @RequestHeader("X-Sharer-User-Id") long userId,
-            @RequestParam(value = "from", defaultValue = "0", required = false) int start,
-            @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+            @RequestParam(value = "from", defaultValue = "0", required = false) @PositiveOrZero int start,
+            @RequestParam(value = "size", defaultValue = "10", required = false) @Positive int size) {
         return itemService.getAllItems(userId, start, size);
     }
 
@@ -50,8 +53,8 @@ public class ItemController {
     public Collection<ItemDtoForBooker> searchItemByName(
             @RequestHeader("X-Sharer-User-Id") long userId,
             @RequestParam(defaultValue = " ", required = false) String text,
-            @RequestParam(value = "from", defaultValue = "0", required = false) int start,
-            @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+            @RequestParam(value = "from", defaultValue = "0", required = false) @PositiveOrZero int start,
+            @RequestParam(value = "size", defaultValue = "10", required = false) @Positive int size) {
         return itemService.searchItemByName(userId, text, start, size);
     }
 

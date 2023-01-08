@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import ru.practicum.shareit.exception.InvalidValidationException;
 import ru.practicum.shareit.exception.ObjectNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -151,50 +150,6 @@ class ItemRequestServiceImplTest {
                 userId, start, size));
         verify(itemRequestRepository, never()).findAllRequests(userId, pageable);
         verify(itemRepository, never()).findAllByRequestId(requestId);
-    }
-
-    @Test
-    void getListOfItemRequestByAllUsers_whenUserFoundButStartLessZero_thenInvalidValidationException() {
-        long userId = 1L;
-        long requestId = 1L;
-        int start = -10;
-        int size = 10;
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
-
-        assertThrows(InvalidValidationException.class,
-                () -> itemRequestService.getListOfItemRequestByAllUsers(userId, start, size));
-        verify(itemRequestRepository, never()).findAllRequests(userId, Pageable.ofSize(10));
-        verify(itemRepository, never()).findAllByRequestId(requestId);
-    }
-
-    @Test
-    void getListOfItemRequestByAllUsers_whenUserFoundButSizeLessZero_thenInvalidValidationException() {
-        long userId = 1L;
-        long requestId = 1L;
-        int start = 0;
-        int size = -10;
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
-
-        assertThrows(InvalidValidationException.class,
-                () -> itemRequestService.getListOfItemRequestByAllUsers(userId, start, size));
-        verify(itemRequestRepository, never()).findAllRequests(userId, Pageable.ofSize(10));
-        verify(itemRepository, never()).findAllByRequestId(requestId);
-    }
-
-    @Test
-    void getListOfItemRequestByAllUsers_whenUserFoundButSizeIsZero_thenInvalidValidationException() {
-        long userId = 1L;
-        long requestId = 1L;
-        int start = 0;
-        int size = 0;
-
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
-
-        assertThrows(InvalidValidationException.class,
-                () -> itemRequestService.getListOfItemRequestByAllUsers(userId, start, size));
-        verify(itemRequestRepository, never()).findAllRequests(userId, Pageable.ofSize(10));
-        verify(itemRepository, never()).findAllByRequestId(requestId);
-
     }
 
     @Test
