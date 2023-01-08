@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class BookingDtoIn {
-    private long id;
+    private Long id;
 
     @NotNull(message = "Следует указать дату начала бронирования.")
     @FutureOrPresent
@@ -22,7 +22,7 @@ public class BookingDtoIn {
     private LocalDateTime end;
 
     @NotNull(message = "Следует указать id.")
-    private long itemId;
+    private Long itemId;
     private long bookerId;
     private String status;
 }

@@ -7,11 +7,11 @@ import java.util.Collection;
 
 public interface BookingService {
 
-    BookingDtoFullOut getBookingInfo(long userId, long bookerId);
+    BookingDtoFullOut getBookingInfo(long userId, long bookingId);
 
-    Collection<BookingDtoFullOut> getListOfBookingsBooker(long userId, String bookingState);
+    Collection<BookingDtoFullOut> getListOfBookingsBooker(long userId, String bookingState, int start, int size);
 
-    Collection<BookingDtoFullOut> getListOfBookingsOwner(long ownerId, String bookingState);
+    Collection<BookingDtoFullOut> getListOfBookingsOwner(long ownerId, String bookingState, int start, int size);
 
     BookingDtoFullOut createBooking(BookingDtoIn bookingDto, long userId);
 

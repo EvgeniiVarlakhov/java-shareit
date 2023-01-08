@@ -19,12 +19,15 @@ import javax.validation.constraints.NotNull;
 @RequiredArgsConstructor
 public class ItemDto {
     private long id;
+
     @NotBlank(message = "Name не может быть пустым.", groups = {CreateItem.class})
     private String name;
+
     @NotBlank(message = "Описание не может быть пустым.", groups = {CreateItem.class})
     private String description;
+
     @NotNull(message = "Следует указать доступность вещи - true/false.", groups = {CreateItem.class})
     private Boolean available;
     private long ownerId;
-    private long requestId;
+    private Long requestId;
 }

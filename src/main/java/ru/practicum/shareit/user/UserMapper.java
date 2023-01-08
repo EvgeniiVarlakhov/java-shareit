@@ -34,7 +34,7 @@ public class UserMapper {
         return user;
     }
 
-    public static Collection<UserDto> mapListToUserDto(Iterable<User> users) {
+    public static Collection<UserDto> mapListToUserDto(Collection<User> users) {
         Collection<UserDto> listUsers = new ArrayList<>();
         for (User user : users) {
             listUsers.add(UserMapper.toUserDto(user));
