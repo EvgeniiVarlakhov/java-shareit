@@ -40,6 +40,6 @@ public class Item {
     private long ownerId;
 
     @Column(name = "request_id")
-    private long requestId;
+    private Long requestId;
 
 }

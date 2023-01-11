@@ -21,7 +21,7 @@ public class ItemDtoForBooker extends ItemDtoAbstract {
     private String description;
     private Boolean available;
     private long ownerId;
-    private long requestId;
+    private Long requestId;
     private BookingForBooker lastBooking;
     private BookingForBooker nextBooking;
     private Collection<CommentDtoOut> comments;

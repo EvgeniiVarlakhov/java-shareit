@@ -38,7 +38,10 @@ public class ItemMapper {
         return itemDtoForBooker;
     }
 
-    public static ItemDtoForOwner toItemDtoForOwner(Item item, Booking last, Booking next, Collection<CommentDtoOut> comments) {
+    public static ItemDtoForOwner toItemDtoForOwner(Item item,
+                                                    Booking last,
+                                                    Booking next,
+                                                    Collection<CommentDtoOut> comments) {
         ItemDtoForOwner itemDtoForOwner = new ItemDtoForOwner();
         itemDtoForOwner.setId(item.getId());
         itemDtoForOwner.setName(item.getName());

@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingRepository;
@@ -38,14 +40,15 @@ public class ItemServiceImpl implements ItemService {
     private final CommentRepository commentRepository;
 
     @Override
-    public Collection<ItemDtoForOwner> getAllItems(long ownerId) {
+    public Collection<ItemDtoForOwner> getAllItems(long ownerId, int start, int size) {
         validateUser(ownerId);
+        Pageable pageable = PageRequest.of(start / size, size);
         Optional<Booking> lastBooking;
         Optional<Booking> nextBooking;
         Collection<ItemDtoForOwner> itemDtoForOwnersList = new ArrayList<>();
-        Collection<Item> itemsList = itemRepository.findAllByOwnerIdIsOrderById(ownerId);
+        Collection<Item> itemsList = itemRepository.findAllByOwnerIdIsOrderById(ownerId, pageable).getContent();
         for (Item item : itemsList) {
-            Collection<Comment> commentList = commentRepository.findAllByItemIdIs(item.getId());
+            Collection<Comment> commentList = commentRepository.findAllByItemId(item.getId());
             Collection<CommentDtoOut> commentDtoOutList = new ArrayList<>();
             for (Comment comment : commentList) {
                 User author = validateUser(comment.getAuthorID());
@@ -77,7 +80,7 @@ public class ItemServiceImpl implements ItemService {
         if (itemFromDb.isEmpty()) {
             throw new ObjectNotFoundException("Вещи с ID = " + itemId + " не существует.");
         }
-        Collection<Comment> commentList = commentRepository.findAllByItemIdIs(itemId);
+        Collection<Comment> commentList = commentRepository.findAllByItemId(itemId);
         Collection<CommentDtoOut> commentDtoOutList = new ArrayList<>();
         for (Comment comment : commentList) {
             User author = validateUser(comment.getAuthorID());
@@ -131,16 +134,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Collection<ItemDtoForBooker> searchItemByName(long userId, String text) {
+    public Collection<ItemDtoForBooker> searchItemByName(long userId, String text, int start, int size) {
         validateUser(userId);
+        Pageable pageable = PageRequest.of(start / size, size);
         Collection<Item> itemsList = new ArrayList<>();
         Collection<CommentDtoOut> commentDtoOutList = new ArrayList<>();
         Collection<ItemDtoForBooker> itemDtoForBookersList = new ArrayList<>();
         if (!text.isBlank()) {
-            itemsList.addAll(itemRepository.findAllItemByText(text));
+            itemsList.addAll(itemRepository.findAllItemByText(text, pageable).getContent());
         }
         for (Item item : itemsList) {
-            Collection<Comment> comments = commentRepository.findAllByItemIdIs(item.getId());
+            Collection<Comment> comments = commentRepository.findAllByItemId(item.getId());
             for (Comment comment : comments) {
                 User author = validateUser(comment.getAuthorID());
                 commentDtoOutList.add(ItemMapper.toCommentDt0FromComment(comment, author));
@@ -166,7 +170,6 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public CommentDtoOut createComment(long itemId, long userId, CommentDtoIn commentDtoIn) {
-
         User author = validateUser(userId);
         Optional<Item> itemFromDb = itemRepository.findById(itemId);
         if (itemFromDb.isEmpty()) {
