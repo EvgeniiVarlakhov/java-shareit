@@ -29,7 +29,7 @@ class ItemRequestGateControllerTest {
 
     @SneakyThrows
     @Test
-    void getListOfItemRequestByRequestor_whenInvoke_thenRerurnListOfRequest() {
+    void getListOfItemRequestByRequestor_whenInvoke_thenReturnStatusIsOk() {
         long userId = 1L;
 
         mvc.perform(get("/requests")
@@ -41,7 +41,7 @@ class ItemRequestGateControllerTest {
 
     @SneakyThrows
     @Test
-    void getItemRequestById_whenInvoke_thenReturnRequest() {
+    void getItemRequestById_whenInvoke_thenReturnStatusIsOk() {
         long userId = 1L;
         long requestId = 2L;
 
@@ -93,7 +93,7 @@ class ItemRequestGateControllerTest {
 
     @SneakyThrows
     @Test
-    void getListOfItemRequestByAllUsers_whenParamFromLessZero_then() {
+    void getListOfItemRequestByAllUsers_whenParamFromLessZero_thenReturnBadRequest() {
         long userId = 1L;
 
         mvc.perform(get("/requests/all")
@@ -107,7 +107,7 @@ class ItemRequestGateControllerTest {
 
     @SneakyThrows
     @Test
-    void getListOfItemRequestByAllUsers_whenParamSizeLessZero_then() {
+    void getListOfItemRequestByAllUsers_whenParamSizeLessZero_thenReturnBadRequest() {
         long userId = 1L;
 
         mvc.perform(get("/requests/all")
@@ -121,7 +121,7 @@ class ItemRequestGateControllerTest {
 
     @SneakyThrows
     @Test
-    void getListOfItemRequestByAllUsers_whenParamSizeIsZero_then() {
+    void getListOfItemRequestByAllUsers_whenParamSizeIsZero_thenReturnBadRequest() {
         long userId = 1L;
 
         mvc.perform(get("/requests/all")

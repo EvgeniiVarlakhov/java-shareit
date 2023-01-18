@@ -55,7 +55,7 @@ class UserGateControllerTest {
 
     @SneakyThrows
     @Test
-    void createUser_whenUserValidatedIsOk_thenReturnUser() {
+    void createUser_whenUserValidatedIsOk_thenReturnStatusIsOk() {
 
         mvc.perform(post("/users")
                         .contentType("application/json")
@@ -132,7 +132,7 @@ class UserGateControllerTest {
 
     @SneakyThrows
     @Test
-    void updateUser_whenUserValidateIsOk_thenReturnStatusIsOkAndUpdatedUser() {
+    void updateUser_whenUserValidateIsOk_thenReturnStatusIsOk() {
         long userId = 1L;
         userDtoIn.setName("newName");
         userDtoIn.setEmail("newEmail@ru");
