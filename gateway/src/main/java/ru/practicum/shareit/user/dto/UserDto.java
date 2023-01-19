@@ -6,6 +6,7 @@ import ru.practicum.shareit.user.UpdateUser;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class UserDto {
+    @Positive
     private Long id;
 
     @NotBlank(message = "Name не может быть пустым.", groups = {CreateUser.class})

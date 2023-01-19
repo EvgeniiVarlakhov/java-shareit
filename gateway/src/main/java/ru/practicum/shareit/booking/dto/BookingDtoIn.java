@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 @ToString
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class BookingDtoIn {
+    @Positive
     private Long id;
 
     @NotNull(message = "Следует указать дату начала бронирования.")

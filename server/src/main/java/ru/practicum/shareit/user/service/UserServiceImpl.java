@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Collection<UserDto> getAllUsers() {
         Collection<User> users = userRepository.findAll();
+        log.info("Получен список пользователей.{}", users);
         return UserMapper.mapListToUserDto(users);
     }
 

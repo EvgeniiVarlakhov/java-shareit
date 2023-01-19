@@ -51,6 +51,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             Collection<Item> items = itemRepository.findAllByRequestId(itemRequest.getId());
             listOfRequests.add(ItemRequestMapper.mapToItemRequestDtoOutWithReplies(itemRequest, items));
         }
+        log.info("Получен список запросов для пользователя c ID = {}. Список = {}", requestorId, listOfRequests);
         return listOfRequests;
     }
 
@@ -62,6 +63,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             throw new ObjectNotFoundException("Запроса с Id = " + requestId + " не существует.");
         }
         Collection<Item> items = itemRepository.findAllByRequestId(requestId);
+        log.info("Получена иформация для запроса c ID = {} для пользователя c ID = {}", requestId, requestorId);
         return ItemRequestMapper.mapToItemRequestDtoOutWithReplies(itemRequest.get(), items);
     }
 
@@ -74,6 +76,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             Collection<Item> items = itemRepository.findAllByRequestId(itemRequest.getId());
             listOfRequests.add(ItemRequestMapper.mapToItemRequestDtoOutWithReplies(itemRequest, items));
         }
+        log.info("Получена иформация по запросам для пользователя c ID = {}. Список = {}", userId, listOfRequests);
         return listOfRequests;
     }
 

@@ -10,6 +10,7 @@ import ru.practicum.shareit.item.CreateItem;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @ToString
 @Setter
@@ -18,6 +19,8 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode
 @RequiredArgsConstructor
 public class ItemDto {
+
+    @Positive
     private long id;
 
     @NotBlank(message = "Name не может быть пустым.", groups = {CreateItem.class})

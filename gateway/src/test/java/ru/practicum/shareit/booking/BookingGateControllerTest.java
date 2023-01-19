@@ -100,7 +100,7 @@ class BookingGateControllerTest {
 
     @SneakyThrows
     @Test
-    void getListOfBookingsBooker_whenWithParams_thenStatusOkAndReturnCollection() {
+    void getListOfBookingsBooker_whenWithParams_thenStatusOk() {
         long userId = 1L;
 
         mvc.perform(get("/bookings")
@@ -118,12 +118,9 @@ class BookingGateControllerTest {
     void getListOfBookingsOwner_whenWithoutParams_thenStatusOkAndParamIsDefault() {
         long userId = 1L;
 
-        String result = mvc.perform(get("/bookings/owner")
+        mvc.perform(get("/bookings/owner")
                         .header("X-Sharer-User-Id", userId))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+                .andExpect(status().isOk());
 
         verify(bookingClient).getListOfBookingsOwner(userId, BookingState.ALL, 0, 10);
     }
@@ -172,7 +169,7 @@ class BookingGateControllerTest {
 
     @SneakyThrows
     @Test
-    void getListOfBookingsOwner_whenWithParams_thenStatusOkAndReturnCollection() {
+    void getListOfBookingsOwner_whenWithParams_thenStatusOk() {
         long userId = 1L;
 
         mvc.perform(get("/bookings/owner")

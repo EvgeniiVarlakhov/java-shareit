@@ -44,12 +44,13 @@ public class BookingServiceImpl implements BookingService {
         }
         Optional<Item> item = itemRepository.findById(booking.get().getItemId());
         if (item.isEmpty()) {
-            throw new ObjectNotFoundException("Вещи не существоет.");
+            throw new ObjectNotFoundException("Вещи c ID = " + booking.get().getItemId() + " не существоет.");
         }
         if (!(booking.get().getBookerId() == userId || item.get().getOwnerId() == userId)) {
             throw new ObjectNotFoundException("Проверить бронирование может только владелец вещи или бронирующий.");
         }
         User owner = validateUser(booking.get().getBookerId());
+        log.info("Получена информация для бронированя с ID = {} для пользователя с ID = {}", booking, userId);
         return BookingMapper.mapToBookingFullOut(booking.get(), owner, item.get());
     }
 
@@ -100,6 +101,7 @@ public class BookingServiceImpl implements BookingService {
             Optional<Item> item = itemRepository.findById(booking.getItemId());
             item.ifPresent(value -> listOfBookingReturn.add(BookingMapper.mapToBookingFullOut(booking, booker, value)));
         }
+        log.info("Получен список бронирований для пользователя с ID = {}. Список = {}.", bookerId, listOfBookingReturn);
         return listOfBookingReturn;
     }
 
@@ -164,6 +166,7 @@ public class BookingServiceImpl implements BookingService {
                     value -> booker.ifPresent(
                             user -> listOfBookingReturn.add(BookingMapper.mapToBookingFullOut(booking, user, value))));
         }
+        log.info("Получен список бронирований для пользователя с ID = {}. Список = {}.", ownerId, listOfBookingReturn);
         return listOfBookingReturn;
     }
 
@@ -208,6 +211,7 @@ public class BookingServiceImpl implements BookingService {
                 throw new InvalidValidationException("Значение должно быть true/false");
         }
         Booking updateBooking = bookingRepository.save(booking.get());
+        log.info("Обработана заявка на бронирование ID = {} c результатом = {}", bookingId, booking.get().getStatus());
         return BookingMapper.mapToBookingFullOut(updateBooking, booker, item);
     }
 

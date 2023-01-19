@@ -15,43 +15,8 @@ import java.util.Objects;
 public class ErrorHandler {
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleObjectNotFoundException(final ObjectNotFoundException e) {
-        log.error("404 {}", e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleInvalidValidationException(final InvalidValidationException e) {
-        log.error("400 {}", e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleConflictException(final ConflictException e) {
-        log.error("409 {}", e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidationError(final MethodArgumentNotValidException e) {
-        log.error("400 {}", e.getMessage(), e);
-        return new ErrorResponse(Objects.requireNonNull(e.getFieldError()).getDefaultMessage());
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleEnumBookingStateException(final EnumBookingStateException e) {
-        log.error("400 {}", e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleNotAvailableException(final NotAvailableException e) {
         log.error("400 {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
@@ -68,6 +33,13 @@ public class ErrorHandler {
     public ErrorResponse handleConstraintViolationException(final ConstraintViolationException e) {
         log.error("400 {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidationError(final MethodArgumentNotValidException e) {
+        log.error("400 {}", e.getMessage(), e);
+        return new ErrorResponse(Objects.requireNonNull(e.getFieldError()).getDefaultMessage());
     }
 
 }

@@ -65,6 +65,7 @@ public class ItemServiceImpl implements ItemService {
             }
             itemDtoForOwnersList.add(ItemMapper.toItemDtoForOwner(item, last, next, commentDtoOutList));
         }
+        log.info("Получен список всех вещей для пользователя ID = {}.", ownerId);
         return itemDtoForOwnersList;
     }
 
@@ -96,8 +97,10 @@ public class ItemServiceImpl implements ItemService {
             next = nextBooking.get();
         }
         if (itemFromDb.get().getOwnerId() == userId) {
+            log.info("Выведена иформация для вещи c ID = {} для пользователя(owner) c ID = {}", itemId, userId);
             return ItemMapper.toItemDtoForOwner(itemFromDb.get(), last, next, commentDtoOutList);
         } else {
+            log.info("Выведена иформация для вещи c ID = {} для пользователя c ID = {}", itemId, userId);
             return ItemMapper.toItemDtoForBooker(itemFromDb.get(), commentDtoOutList);
         }
     }
@@ -147,6 +150,8 @@ public class ItemServiceImpl implements ItemService {
             itemDtoForBookersList.add(ItemMapper.toItemDtoForBooker(item, commentDtoOutList));
 
         }
+        log.info("Получен список вещей для пользователя c ID = {} по запросу = {}. Найдено = {}",
+                userId, text, itemDtoForBookersList);
         return itemDtoForBookersList;
     }
 
